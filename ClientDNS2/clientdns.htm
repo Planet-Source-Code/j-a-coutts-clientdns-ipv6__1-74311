@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>ClientDNS</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY>
+<BODY BGCOLOR="#FFFFFF" LINK="#6633FF" VLINK="#EE0000" ALINK="##990000"> 
+<CENTER><P><A NAME="TOP"></A></P>
+<img src="yhead.gif" alt="logo">
+
+<TABLE WIDTH="600" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR>
+<TD WIDTH="300"><FONT SIZE=+3>ClientDNS</FONT></TD>
+<TD WIDTH="300" ALIGN="RIGHT" VALIGN="BOTTOM"><FONT SIZE=-1><A HREF="http://www.yellowhead.com/default.htm">Back to Home Page</A></FONT></TD></TR>
+</TABLE>
+</P>
+
+<P><TABLE WIDTH="600" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR>
+<TD WIDTH="100%"><P><BR>
+</P>
+<HR>
+<P>ClientDNS is a utility program designed and intended to give you full access to the DNS packets returned from the requested server. DNS packets are very compact and highly cryptic, and because of that, command line utilities like "NSLookUP" will display incomplete interpretted results. ClientDNS returns all the results on separate tabs.</P>
+<P>ClientDNS is written in VB6, and is being made available in ZIP format. Installation is usually straight forward, using "setup.exe" to install files extracted from "ClientDNS.cab" as laid out in "setup.lst". It has been tested to be UAC compatible.</P>
+<P>Internet standards require DNS servers to accept both UDP and TCP requests. TCP is very seldom used however, and some servers do not accept them due to firewall restrictions on port 53. ClientDNS does not support TCP.</P>
+<P>ClientDNS finds and uses your default DNS servers to get the IP addresses of the named servers. Consequently, it cannot be used to troubleshoot your own DNS service unless you manually enter the IP address of the server. It also does not support IPv6. Executing the program:</P>
+<center>
+<IMG SRC="ClientDNS1.jpg" align=CENTRE,BORDER=0></center>
+<P>ClientDNS will find your default Nameservers and list them in the DNS Server box. In the above case, the address of the "gateway" is being used, and it simply forwards requests to the default locations it has configured. For a further explanation on using the program, see <a HREF="DNS_How.htm">How DNS Works!</a>.</P>
+<B>ADDITIONAL NOTES</B>
+<HR>
+<P>ClientDNS supports many different question types, but the 2 most common are "A" records and "PTR" records. PTR requests DO NOT require the use of the reverse INADDR command. The IP address is entered in the normal forward manner, and ClientDNS reformats it.</P>
+<center>
+<IMG SRC="ptrDNS.jpg" align=CENTRE,BORDER=0></center>
+<P>Notice that ClientDNS defaults to "Recursion Desired" when first activated. When the "Root Servers" button is clicked, it automatically reverts to no recursion since it is not offered by the root servers.</P>
+<P>Double clicking on any of the displayed fields will display the field in the bottom line and add it to the clipboard. This feature is useful when drilling down to get to the answer.
+</P>
+<P ALIGN=RIGHT><A HREF="#TOP">Back to Top</A></TD></TR>
+</TABLE>
+</P>
+
+<P><TABLE WIDTH="600" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR>
+<TD WIDTH="100%"><P><BR>
+</P>
+
+<A HREF=http://www.yellowhead.com/default.htm>| Home Page </A>
+</TABLE>
+<BR>
+</TABLE></CENTER>
+<HR>
+<CENTER><img src="address.jpg" alt="address"></CENTER>
+
+</BODY>
+</HTML>
+
