@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>DNS How To!</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY>
+<BODY BGCOLOR="#FFFFFF" LINK="#6633FF" VLINK="#EE0000" ALINK="##990000"> 
+<BODY BACKGROUND="cloud.gif">
+<CENTER><P><A NAME="TOP"></A></P>
+<img src="yhead.gif" alt="logo">
+<TABLE WIDTH="600" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR>
+<TD WIDTH="300" ALIGN="RIGHT" VALIGN="BOTTOM"><FONT SIZE=-1><A 
+
+HREF="http://www.yellowhead.com/default.htm">Back to Home Page</A></FONT></TD></TR>
+<TD WIDTH="300"><FONT SIZE=+3>HOW DNS WORKS!</FONT></TD>
+</TABLE>
+<TABLE WIDTH="600" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR>
+<TD WIDTH="100%">
+<HR>
+<P>
+DNS (Domain Name System) is the heart of the Internet service, and is perhaps 
+the most misunderstood part of it. You could not find your favorite Web page 
+without it. There are actually 2 types of DNS service, 
+<a href="http://en.wikipedia.org/wiki/IP_address">IPV4</a> and 
+<a href="http://en.wikipedia.org/wiki/IP_address">IPV6</a>. Since IPV6 is 
+not widely used yet, we will restrict our discussions to IPV4.</P>
+<P>
+When you enter your favorite <a href="http://www.sharpened.net/glossary/definition.php?url">URL </a> 
+or recover it from your shortcuts (eg. http://www.yellowhead.com/), your 
+computer has no idea where to look for that page. The Internet works with 
+numbers, not text, and it must be translated (http://[24.65.44.238]/) before 
+it can be used. This is the function of the DNS service.</P>
+
+<P>
+DNS service is usually provided by your ISP, although I have shown the 
+OpenDNS servers below. IF you are using Windows, you can go to the command 
+prompt and enter the command:
+<PRE>
+C:\>ipconfig /all
+
+Ethernet adapter Local Area Connection:
+
+   Connection-specific DNS Suffix  . :
+   Description . . . . . . . . . . . : Intel(R) 82562V-2 10/100 Network Connection
+   Physical Address. . . . . . . . . : 00-1D-09-7E-44-A2
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+   IPv4 Address. . . . . . . . . . . : 192.168.1.4(Preferred)
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.1.1
+   Primary DNS Server. . . . . . . . : 208.67.222.222
+   Secondary DNS Server. . . . . . . : 208.67.220.220
+   NetBIOS over Tcpip. . . . . . . . : Enabled
+</PRE>
+DNS servers are supposed to accept both 
+<a href="http://www.techterms.com/definition/udp">UDP</a> and 
+<a href="http://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP </a> 
+requests, but TCP requests are not universally accepted because some routers 
+and firewalls do not pass along the TCP requests on port 53. UDP packets are 
+limited in size (512 bytes), and delivery is not assured because there is no 
+connection established. Therefore, the requesting computer will have to wait 
+for the request to time out. When it times out on one server, it switches to 
+the other. Why they use the names Primary and Secondary is not fully understood, 
+as your computer will use whichever one it last had success with. For that 
+reason it is not advisable to configure more than 2 DNS servers, as it will 
+have to time out on all configured servers on a bad lookup, and that could 
+result in a long wait.</P>
+<P>
+The DNS protocol is very compact and highly cryptic, so for this
+discussion I will use screen shots from a program that I wrote called 
+Client DNS. When this program is loaded, it finds the default DNS servers:</P>
+<center>
+
+<IMG SRC="ClientDNS1.jpg" align=CENTRE,BORDER=0></center>
+<P>
+In this case, there is only one DNS server listed because I am using a 
+NAT (Network Address Translation) router as DNS. It simply relays the 
+requests to one of the DNS servers that it has in its own configuration. 
+When you enter the domain name to translate, click on a server name, and 
+click the "Send Query" button:</P>
+<center>
+<IMG SRC="DNSRecur1.jpg" align=CENTRE,BORDER=0></center>
+<P>
+There is a lot of information in the header. First of all, it tells us that 
+this is not an authoratative answer (Authoritative Answer = False). That is 
+because this server does not host this particular domain, and 
+<a href="http://www.simpledns.com/help/v50/df_recursion.htm">recursion </a> 
+was requested and utilized to find the answer. This will be explained in 
+more detail later. It also tells us that there were no errors and 1 
+Question (QDCount=1), 1 Answer (ANCount=1), 2 Nameserver (NSCount=2), and 
+1 Additional (ARCount=1) records received. Our ClientDNS program displays 
+each of those record types on separate tabs. Clicking on the Question TAB:</P>
+<center>
+<IMG SRC="DNSRecur2.jpg" align=CENTRE,BORDER=0></center>
+<P>
+Clicking on the Answer TAB:</P>
+
+<center>
+<IMG SRC="DNSRecur3.jpg" align=CENTRE,BORDER=0></center>
+<P>
+And the Authority TAB:</P>
+<center>
+<IMG SRC="DNSRecur4.jpg" align=CENTRE,BORDER=0></center>
+<P>
+And the Additional TAB:</P>
+<center>
+<IMG SRC="DNSRecur5.jpg" align=CENTRE,BORDER=0></center>
+<P>
+But that is only part of the answer. Where does your listed DNS server get 
+the answer from? To answer that question, we will follow the recursive 
+procedure that your DNS server uses. Every domain name must be registered 
+at one of the many Domain Registrars. The part of the domain behind the 
+last dot indicates the high level domain, and the root servers will tell 
+us where to find the servers that serve that particular high level domain 
+(eg. com). Clicking on the "Root Servers" button loads the high level 
+servers which are always in cache:</P>
+<center>
+<IMG SRC="ClientDNS2.jpg" align=CENTRE,BORDER=0></center>
+
+<P>
+By selecting one of those servers and sending a query, we can examine 
+the header:</P>
+<center>
+<IMG SRC="ClientDNS3.jpg" align=CENTRE,BORDER=0></center>
+<P>
+<P>
+Notice that these servers do not use recursion and do not provide the 
+answer for us, but instead point us to 13 other Nameservers:</P>
+<center>
+<IMG SRC="ClientDNS4.jpg" align=CENTRE,BORDER=0></center>
+<P>
+with their location:</P>
+<center>
+<IMG SRC="ClientDNS5.jpg" align=CENTRE,BORDER=0></center>
+<P>
+
+Selecting one of those and querying again:</P>
+<center>
+<IMG SRC="ClientDNS6.jpg" align=CENTRE,BORDER=0></center>
+<P>
+Notice that these servers also do not provide recursion, and again do not 
+provide the answer, but instead point us to the actual authoratative 
+Nameservers:</P>
+<center>
+<IMG SRC="ClientDNS7.jpg" align=CENTRE,BORDER=0></center>
+Selecting one of those and sending a query:</P>
+<center>
+<IMG SRC="ClientDNS8.jpg" align=CENTRE,BORDER=0></center>
+<P>
+<P>
+finally provides us with an authoratative answer:</P>
+
+<center>
+<IMG SRC="ClientDNS9.jpg" align=CENTRE,BORDER=0></center>
+<P>
+MAN, WHAT A LOT OF WORK TO ANSWER A SIMPLE QUESTION. But you can see that 
+when you register a domain, you are simply registering which DNS servers 
+are being utilized to host that domain. Once your own DNS server has aquired 
+the answer, it usually adds it to cache. How long does it remain in cache? 
+Once again, the answer is not straight forward. The original query provided 
+a TTL (Time To Live). The DNS server will generally use this number as the 
+refresh timeout, but it is not under any obligation to do so. It can set 
+its own minimum or maximum timeout. When the timeout has been decremented 
+to zero without being called upon again (refreshed), it is deleted from cache.</P>
+<P ALIGN=RIGHT><A HREF="#TOP">Back to Top</A></TD></TR>
+</TABLE>
+
+</P>
+<P><TABLE WIDTH="600" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR>
+<TD WIDTH="100%"><P><BR>
+</P>
+<A HREF=http://www.yellowhead.com/default.htm>| Home Page </A>
+</TABLE>
+<BR>
+</TABLE></CENTER>
+<HR>
+<CENTER><img src="address.jpg" alt="address"></CENTER>
+
+</BODY>
+</HTML>
+
